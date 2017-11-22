@@ -4,11 +4,16 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
-var index = require('./routes/index');
-var users = require('./routes/users');
+var routes = require('./routes/index');
 
 var app = express();
+
+var users = {
+  'someone' : {
+    name : 'phenan',
+    website : 'https://github.com/Phenanth'
+  }
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,8 +27,23 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/users', users);
+app.use('/', routes);
+
+app.all('/user/:username', function(req, res, next) {
+  if (users[req.params.username]) {
+    next();
+  }  else {
+    next(new Error(req.params.username + ' does not exist.'));
+  }
+});
+
+app.get('/user/:username', function(req, res) {
+  res.send(JSON.stringify(users[req.params.username]));
+});
+
+app.put('/user/:username', function(req, res) {
+  res.send('Done');
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
