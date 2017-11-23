@@ -8,26 +8,32 @@ var routes = require('./routes/index');
 
 var app = express();
 
+var util = require('util');
+
+app.helpers({ //错误用法
+  inspect: function(obj) {
+    return util.insepect(obj, true);
+  }
+});
+
+app.dynamicHelpers({
+  headers: function(req, res) {
+    return req.headers;
+  }
+});
+
+app.get('/helper', function(req, res) {
+  res.render('helper', {
+    title: 'Helpers'
+  });
+});
+
 var users = {
   'someone' : {
     name : 'phenan',
     website : 'https://github.com/Phenanth'
   }
 }
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', routes);
 
 app.all('/user/:username', function(req, res, next) {
   if (users[req.params.username]) {
@@ -44,6 +50,27 @@ app.get('/user/:username', function(req, res) {
 app.put('/user/:username', function(req, res) {
   res.send('Done');
 });
+
+app.get('/list', function(req, res) {
+  res.render('list', {
+    title: 'List',
+    items: [1998, 'phenan', 'express', 'Node.js']
+  });
+});
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+// uncomment after placing your favicon in /public
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/', routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
