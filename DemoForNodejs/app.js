@@ -10,6 +10,7 @@ var app = express();
 
 var util = require('util');
 
+/*
 app.helpers({ //错误用法
   inspect: function(obj) {
     return util.insepect(obj, true);
@@ -27,35 +28,38 @@ app.get('/helper', function(req, res) {
     title: 'Helpers'
   });
 });
+*/
 
-var users = {
-  'someone' : {
-    name : 'phenan',
-    website : 'https://github.com/Phenanth'
-  }
-}
-
-app.all('/user/:username', function(req, res, next) {
-  if (users[req.params.username]) {
-    next();
-  }  else {
-    next(new Error(req.params.username + ' does not exist.'));
-  }
+app.get('/', function(req, res) {
+  res.render('index', {title: 'Express'});
 });
 
-app.get('/user/:username', function(req, res) {
-  res.send(JSON.stringify(users[req.params.username]));
+app.get('/u:user', function(req, res) {
+
 });
 
-app.put('/user/:username', function(req, res) {
-  res.send('Done');
+app.post('/post', function(req, res) {
+
 });
 
-app.get('/list', function(req, res) {
-  res.render('list', {
-    title: 'List',
-    items: [1998, 'phenan', 'express', 'Node.js']
-  });
+app.get('/reg', function(req, res) {
+
+});
+
+app.post('/reg', function(req, res) {
+
+});
+
+app.get('/login', function(req, res) {
+
+});
+
+app.post('/reg', function(req, res) {
+
+});
+
+app.get('/logout', function(req, res) {
+
 });
 
 // view engine setup
@@ -70,7 +74,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
+//app.use('/', routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
