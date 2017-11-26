@@ -51,7 +51,8 @@ app.post('/reg', function(req, res) {
 });
 
 app.get('/login', function(req, res) {
-
+  res.render('login');
+  console.log('Entered the login page.');
 });
 
 app.post('/reg', function(req, res) {
@@ -62,9 +63,12 @@ app.get('/logout', function(req, res) {
 
 });
 
-// view engine setup
+// view engine setup 
+// 实际上由于版本问题，使用bootstrap和jquery的引入不成功，没有样式上的改变
+// 且ejs没有使用layout，没有footer等标签。
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
