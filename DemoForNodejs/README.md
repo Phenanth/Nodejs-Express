@@ -620,3 +620,26 @@ app.get('/helper', function(req, res) {
 > app.helpers()无此函数，有待更新版本新用法。视图助手将用于后文`session`部分
 
 **有待修复版本原因引起的错误**
+
+其后在`app.js`中增加了网站应有的路由关系，并使用`bootstrap`实现页面设计（CSS与HTML）部分。
+
+> 存在因版本问题未成功引入`bootstrap`与`jquery`的问题，且并未使用`navbar`以及`footer`等ID与标签。
+
+### NoSQL - MongoDB
+
+讲述了关系型数据库与非关系型数据库的特点（p115），以及MongoDB中文档的属性。
+
+```
+{ "_id" : ObjectId( "4f7fe8432b4a1077a7c551e8" ), "uid" : 2004,
+"username" : "byvoid",
+"net9" : { "nickname" : "BYVoid",
+          "surname" : "Kuo",
+          "givenname" : "Carbo",
+          "fullname" : "Carbo Kuo",
+          "emails" : [ "byvoid@byvoid.com", "byvoid.kcp@gmail.com" ],
+          "website" : "http://www.byvoid.com",
+          "address" : "Zijing 2#, Tsinghua University" }
+      }
+```
+MongoDB的数据格式是JSON
+
