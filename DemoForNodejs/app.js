@@ -31,7 +31,10 @@ app.get('/helper', function(req, res) {
 */
 
 app.get('/', function(req, res) {
-  res.render('index', {title: 'Express'});
+  res.render('index', {
+    title: 'Express',
+    layout: 'layout'
+  });
 });
 
 app.get('/u:user', function(req, res) {
@@ -52,7 +55,6 @@ app.post('/reg', function(req, res) {
 
 app.get('/login', function(req, res) {
   res.render('login');
-  console.log('Entered the login page.');
 });
 
 app.post('/reg', function(req, res) {
