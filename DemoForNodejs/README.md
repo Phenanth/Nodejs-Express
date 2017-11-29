@@ -643,3 +643,30 @@ app.get('/helper', function(req, res) {
 ```
 MongoDB的数据格式是JSON
 
+### 会话
+
+由于Express与`session`中间件不再绑定，按照书上的用法首先需要`npm install express-session --save`
+
+然后在`app.js`中添加:
+```
+var session = require('express-session')
+var MongoStore = require('connect-mongo')(session)
+
+app.use(session({
+  secret: settings.cookieSecret,
+  key: settings.db,
+  cookie: {maxAge: 1000 * 60 * 60 * 24 * 30}, // 30 days
+  resave: false,
+  saveUninitialized: true,
+  store: new MongoStore({
+    url: 'mongodb://localhost/microblog'
+  })
+}));
+```
+
+[版本移植参考网站](https://cnodejs.org/topic/567a1120222744630726b244)
+
+> 今天深刻地体会到了使用过时的教程有多难受（就连参考网站都是两年前的了）
+
+### 注册、登入
+
