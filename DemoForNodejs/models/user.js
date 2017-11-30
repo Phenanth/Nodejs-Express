@@ -1,4 +1,5 @@
 var mongodb = require('./db');
+var crypto = require('crypto');
 
 function User(user) {
 	this.name  = user.name;
@@ -38,7 +39,7 @@ User.get = function get(username, callback) {
 			return callback(err);
 		}
 
-		db,collection('users', function(err, collection) {
+		db.collection('users', function(err, collection) {
 			if (err) {
 				return callback(err);
 			}

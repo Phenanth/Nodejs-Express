@@ -87,6 +87,9 @@ app.post('/post', function(req, res) {
 app.get('/reg', function(req, res) {
   res.render('reg', {
     title: '用户注册',
+    user: req.session.user,
+    success: req.flash('success').toString(),
+    error: req.flash('error').toString()
   });
 });
 
@@ -108,23 +111,24 @@ app.post('/reg', function(req, res) {
     name: req.body.username,
     password: password
   });
-
   // 检查用户是否存在
   User.get(newUser.name, function(err, user) {
-    if (user)
-      err = 'User already exists.';
     if (err) {
       req.flash('error', err);
       return res.redirect('/reg');
     }
+    if (user) {
+      err = 'User already exists.';
+      req.flash('error', err);
+      return res.redirect('/reg');
+    }
 
-    newUser.save(function(err) {
+    newUser.save(function(err, user) {
       if (err) {
         req.flash('error', err);
         return res.redirect('/reg');
       }
-      console.log(newUser);
-      req.session.user = newUser;
+      req.session.user = user;
       req.flash('success', '注册成功');
       res.redirect('/');
     });
@@ -132,15 +136,42 @@ app.post('/reg', function(req, res) {
 });
 
 app.get('/login', function(req, res) {
-  res.render('login');
+  res.render('login', {
+    title: '用户登入',
+    user: req.session.user,
+    success: req.flash('success').toString(),
+    error: req.flash('error').toString()
+  });
 });
 
-app.post('/reg', function(req, res) {
+app.post('/login', function(req, res) {
+  var md5 = crypto.createHash('md5');
+  var password = md5.update(req.body.password).digest('hex');
 
+  User.get(req.body.username, function(err, user) {
+    if (err) {
+      req.flash('error', err);
+      return res.redirect('/login');
+    }
+    if (!user) {
+      req.flash('error', '用户不存在');
+      return res.redirect('/login');
+    }
+    if (user.password != password) {
+      req.flash(error, '密码错误');
+      return res.redirect('/login');
+    }
+
+    req.session.user = user;
+    req.flash('success', '登入成功');
+    res.redirect('/');
+  });
 });
 
 app.get('/logout', function(req, res) {
-
+  req.session.user = null;
+  req.flash('success', '登出成功');
+  res.redirect('/');
 });
 
 // view engine setup 
